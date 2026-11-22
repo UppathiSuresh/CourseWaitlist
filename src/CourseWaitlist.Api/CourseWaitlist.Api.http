@@ -1,0 +1,49 @@
+@baseUrl = http://127.0.0.1:5080
+
+### Read an empty offering. Start from a fresh process for this sequence.
+GET {{baseUrl}}/offering
+
+### Anu takes the first seat.
+POST {{baseUrl}}/offering/enrollments
+Content-Type: application/json
+
+{"learnerId":"anu"}
+
+### Ben takes the second seat.
+POST {{baseUrl}}/offering/enrollments
+Content-Type: application/json
+
+{"learnerId":"ben"}
+
+### Chitra becomes first on the waitlist.
+POST {{baseUrl}}/offering/enrollments
+Content-Type: application/json
+
+{"learnerId":"chitra"}
+
+### Dev joins behind Chitra.
+POST {{baseUrl}}/offering/enrollments
+Content-Type: application/json
+
+{"learnerId":"dev"}
+
+### Repeat Chitra's request. Expect alreadyWaitlisted.
+POST {{baseUrl}}/offering/enrollments
+Content-Type: application/json
+
+{"learnerId":"chitra"}
+
+### Anu drops. Expect promotedLearnerId to be chitra.
+DELETE {{baseUrl}}/offering/enrollments/anu
+
+### Ben and Chitra are enrolled. Dev remains on the waitlist.
+GET {{baseUrl}}/offering
+
+### Learner without the prerequisite. Expect 422 and prerequisiteNotMet.
+POST {{baseUrl}}/offering/enrollments
+Content-Type: application/json
+
+{"learnerId":"unknown"}
+
+### OpenAPI document. Available in Development.
+GET {{baseUrl}}/openapi/v1.json
